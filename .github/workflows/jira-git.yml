@@ -1,4 +1,4 @@
-name: Jira-GitHub Integration Test
+name: GitHub-Jira Integration Test
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Create Jira Issue Key
-        run: echo "This is a test commit [JIRA-123]" > test.txt
+        run: echo "This is a test commit [KAN-2]" > test.txt
 
       - name: Commit and Push
         run: |
@@ -23,8 +23,3 @@ jobs:
           git commit -m "Test commit with Jira issue key"
           git push origin main
 
-      - name: Deploy to Environment
-        uses: chrnorm/deployment-action@releases/v1
-        with:
-          environment: staging
-          status: success
