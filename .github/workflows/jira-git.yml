@@ -1,25 +1,24 @@
-name: GitHub-Jira Integration Test
-
-on:
+name: 'build-test'
+on: # rebuild any PRs and main branch changes
+  pull_request:
   push:
     branches:
       - main
+      - 'releases/*'
 
 jobs:
-  test:
+  build: # make sure build/ci work properly
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Create Jira Issue Key
-        run: echo "This is a test commit [KAN-2]" > test.txt
-
-      - name: Commit and Push
-        run: |
-          git add test.txt
-          git config --global user.name "Jama-04"
-          git config --global user.email "jamabaigaz@example.com"
-          git commit -m "Test commit with Jira issue key"
-          git push origin main
-
+      - uses: actions/checkout@v2
+      - run: |
+          npm install
+      - run: |
+          npm run all
+  test: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          token: '${{ github.token }}'
