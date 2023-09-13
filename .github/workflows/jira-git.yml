@@ -1,0 +1,30 @@
+name: Jira-GitHub Integration Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create Jira Issue Key
+        run: echo "This is a test commit [JIRA-123]" > test.txt
+
+      - name: Commit and Push
+        run: |
+          git add test.txt
+          git config --global user.name "Your GitHub Username"
+          git config --global user.email "your.email@example.com"
+          git commit -m "Test commit with Jira issue key"
+          git push origin main
+
+      - name: Deploy to Environment
+        uses: chrnorm/deployment-action@releases/v1
+        with:
+          environment: staging
+          status: success
